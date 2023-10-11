@@ -19,8 +19,15 @@ export default new Vuex.Store({
     sup: '',
     supdepart: '',
     date:'',
+    isAuthenticated: false,
+    user: null,
+    username: null,
+    serie: null,
   },
   mutations: {
+    updateSerie(state, newSerie){
+      state.serie = newSerie;
+    },
     updateDate(state, newDate){
       state.date = newDate;
     },
@@ -69,7 +76,41 @@ export default new Vuex.Store({
     updateSupDepart(state, newSupDepart) {
       state.supdepart = newSupDepart;
     },
+    SET_AUTHENTICATED(state, isAuthenticated) {
+      state.isAuthenticated = isAuthenticated;
+      // Store the authentication state in localStorage
+      localStorage.setItem('isAuthenticated', isAuthenticated ? '1' : '0');
+    },
+    SET_USER(state, user) {
+      state.user = user;
+      // Store the user in localStorage
+      localStorage.setItem('user',user);
+    },
+    SET_USERNAME(state, username) {
+      state.username = username;
+      // Store the username in localStorage
+      localStorage.setItem('username', username);
+    },
   },
-  actions: {},
-  getters: {},
+  actions: {  
+    login({ commit }, user ) {
+    // Logic for user login, set isAuthenticated and user if login is successful
+    commit('SET_AUTHENTICATED', true);
+    commit('SET_USER', user);
+  },
+  setusername({ commit }, username ) {
+    commit('SET_USERNAME', username);
+  },
+  logout({ commit }) {
+    // Logic for user logout, set isAuthenticated and user to null
+    commit('SET_AUTHENTICATED', false);
+    commit('SET_USER', null);
+    commit('SET_USERNAME', null);
+  },},
+  getters: { 
+    isAuthenticated: (state) => state.isAuthenticated,
+    user: (state) => state.user,
+    username: (state) => state.username,
+  },
+    strict: process.env.NODE_ENV !== 'production',
 });
